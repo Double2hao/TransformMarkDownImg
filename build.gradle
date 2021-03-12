@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+
+group 'com.xujiajia.test'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.squareup.okhttp:okhttp:2.7.5'
+}
