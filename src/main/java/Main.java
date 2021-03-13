@@ -11,7 +11,7 @@ public class Main {
     //图片想要替换的地址，笔者此处写的是自己github的某个项目的地址
     private static final String IMG_URL_REPLACE = "https://raw.githubusercontent.com/Double2hao/xujiajia_blog/main/img";
     //constants
-    private static final String IMG_URL_START_STRING = "<img src=\"";
+    private static final String IMG_URL_START_STRING = " src=\"http";
     private static final String IMG_URL_END_STRING = "\"";
 
 
@@ -48,7 +48,7 @@ public class Main {
             if (imgUrlStartIndex < 0) {
                 break;//找不到img的时候退出循环
             }
-            imgUrlStartIndex += IMG_URL_START_STRING.length();//图片url的起始地址
+            imgUrlStartIndex += IMG_URL_START_STRING.length() - 4;//图片url的起始地址
             //自图片起始位置起开始找引号，那么中间的一段就是图片的url
             String lastContentString = content.substring(imgUrlStartIndex);
             indexToStart = lastContentString.indexOf(IMG_URL_END_STRING) + imgUrlStartIndex;
@@ -58,7 +58,7 @@ public class Main {
             String imgName = "" + fileCount + imgCount;//图片下载后的名字
             OkHttpManager.getInstance().downloadPic(imgUrl, IMG_PARENT_PATH + "/" + imgName + ".png");
             //替换图片地址
-            content = content.replaceFirst(imgUrl, IMG_URL_REPLACE + "/" + imgName+".png");
+            content = content.replaceFirst(imgUrl, IMG_URL_REPLACE + "/" + imgName + ".png");
         }
         //删除文件后，将替换了图片地址的string重新写成文件
         String filePath = file.getAbsolutePath();
