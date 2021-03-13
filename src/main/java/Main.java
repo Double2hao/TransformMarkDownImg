@@ -4,9 +4,13 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 
 public class Main {
+    //markdown文件的地址
     private static final String MD_PARENT_PATH = "/Users/xujiajia/Documents/TransformMarkDownImg/src/main/resources/md";
+    //图片下载的地址
     private static final String IMG_PARENT_PATH = "/Users/xujiajia/Documents/TransformMarkDownImg/src/main/resources/img";
+    //图片想要替换的地址，笔者此处写的是自己github的某个项目的地址
     private static final String IMG_URL_REPLACE = "https://github.com/Double2hao/xujiajia_blog/tree/main/img";
+    //constants
     private static final String IMG_URL_START_STRING = "<img src=\"";
     private static final String IMG_URL_END_STRING = "\"";
 
@@ -36,28 +40,31 @@ public class Main {
             return;
         }
         int indexToStart = 0;
-        for (int imgCount = 0; ; imgCount++) {
+        for (int imgCount = 0; ; imgCount++) {//一篇文章可能有多个图片，count是用来标识第几张
             //获取imgUrl
             int imgUrlStartIndex = content.indexOf(IMG_URL_START_STRING, indexToStart);
             if (imgUrlStartIndex < 0) {
-                break;
+                break;//找不到img的时候退出循环
             }
-            imgUrlStartIndex += IMG_URL_START_STRING.length();
+            imgUrlStartIndex += IMG_URL_START_STRING.length();//图片url的起始地址
+            //自图片起始位置起开始找引号，那么中间的一段就是图片的url
             String lastContentString = content.substring(imgUrlStartIndex);
             indexToStart = lastContentString.indexOf(IMG_URL_END_STRING) + imgUrlStartIndex;
             String imgUrl = content.substring(imgUrlStartIndex, indexToStart);
             System.out.println("imgUrl:" + imgUrl);
             //下载图片
-            String imgName = file.getName() + imgCount;
+            String imgName = file.getName() + imgCount;//图片下载后的名字
             OkHttpManager.getInstance().downloadPic(imgUrl, IMG_PARENT_PATH + "/" + imgName + ".png");
             //替换图片地址
             content=content.replaceFirst(imgUrl, IMG_URL_REPLACE + "/" + imgName);
         }
+        //删除文件后，将替换了图片地址的string重新写成文件
         String filePath = file.getAbsolutePath();
         file.delete();
         writeFile(content, filePath);
     }
 
+    //将文件读成string
     private static String readStringFromFile(File file) {
         if (file == null || !file.exists()) {
             return null;
@@ -68,7 +75,7 @@ public class Main {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 stringBuilder.append(line);
-                stringBuilder.append("\n");
+                stringBuilder.append("\n");//别丢了换行符号
             }
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
             reader.close();
@@ -79,6 +86,7 @@ public class Main {
         return null;
     }
 
+    //将string写成文件
     private static void writeFile(String content, String filePath) {
         if (content == null) {
             return;
