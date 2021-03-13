@@ -21,17 +21,19 @@ public class Main {
         if (listFiles == null) {
             return;
         }
+        int fileCount = 0;
         for (File file : listFiles) {
             System.out.println("fileName:" + file.getName());
             try {
-                downloadImgAndReplacePath(file);
+                downloadImgAndReplacePath(file, fileCount);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            fileCount++;
         }
     }
 
-    private static void downloadImgAndReplacePath(File file) {
+    private static void downloadImgAndReplacePath(File file, int fileCount) {
         if (file == null || !file.exists()) {
             return;
         }
@@ -53,10 +55,10 @@ public class Main {
             String imgUrl = content.substring(imgUrlStartIndex, indexToStart);
             System.out.println("imgUrl:" + imgUrl);
             //下载图片
-            String imgName = file.getName() + imgCount;//图片下载后的名字
+            String imgName = "" + fileCount + imgCount;//图片下载后的名字
             OkHttpManager.getInstance().downloadPic(imgUrl, IMG_PARENT_PATH + "/" + imgName + ".png");
             //替换图片地址
-            content=content.replaceFirst(imgUrl, IMG_URL_REPLACE + "/" + imgName);
+            content = content.replaceFirst(imgUrl, IMG_URL_REPLACE + "/" + imgName+".png");
         }
         //删除文件后，将替换了图片地址的string重新写成文件
         String filePath = file.getAbsolutePath();
