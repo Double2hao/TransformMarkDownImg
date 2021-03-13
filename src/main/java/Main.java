@@ -9,7 +9,7 @@ public class Main {
     //图片下载的地址
     private static final String IMG_PARENT_PATH = "/Users/xujiajia/Documents/TransformMarkDownImg/src/main/resources/img";
     //图片想要替换的地址，笔者此处写的是自己github的某个项目的地址
-    private static final String IMG_URL_REPLACE = "https://github.com/Double2hao/xujiajia_blog/tree/main/img";
+    private static final String IMG_URL_REPLACE = "https://raw.githubusercontent.com/Double2hao/xujiajia_blog/main/img";
     //constants
     private static final String IMG_URL_START_STRING = "<img src=\"";
     private static final String IMG_URL_END_STRING = "\"";
