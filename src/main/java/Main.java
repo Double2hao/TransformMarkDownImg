@@ -55,10 +55,13 @@ public class Main {
             String imgUrl = content.substring(imgUrlStartIndex, indexToStart);
             System.out.println("imgUrl:" + imgUrl);
             //下载图片
-            String imgName = "" + fileCount + imgCount;//图片下载后的名字
-            OkHttpManager.getInstance().downloadPic(imgUrl, IMG_PARENT_PATH + "/" + imgName + ".png");
+            String imgName = "" + fileCount + imgCount + ".png";//图片下载后的名字
+            OkHttpManager.getInstance().downloadPic(imgUrl, IMG_PARENT_PATH + "/" + imgName);
             //替换图片地址
-            content = content.replaceFirst(imgUrl, IMG_URL_REPLACE + "/" + imgName + ".png");
+            String newImgPath = IMG_URL_REPLACE + "/" + imgName;
+            content = content.replace(imgUrl, newImgPath);
+            //由于url更改，因此index的位置也变了
+            indexToStart += newImgPath.length() - imgUrl.length();
         }
         //删除文件后，将替换了图片地址的string重新写成文件
         String filePath = file.getAbsolutePath();
