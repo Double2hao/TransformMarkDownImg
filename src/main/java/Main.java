@@ -21,19 +21,17 @@ public class Main {
         if (listFiles == null) {
             return;
         }
-        int fileCount = 0;
         for (File file : listFiles) {
             System.out.println("fileName:" + file.getName());
             try {
-                downloadImgAndReplacePath(file, fileCount);
+                downloadImgAndReplacePath(file);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            fileCount++;
         }
     }
 
-    private static void downloadImgAndReplacePath(File file, int fileCount) {
+    private static void downloadImgAndReplacePath(File file) {
         if (file == null || !file.exists()) {
             return;
         }
@@ -55,7 +53,8 @@ public class Main {
             String imgUrl = content.substring(imgUrlStartIndex, indexToStart);
             System.out.println("imgUrl:" + imgUrl);
             //下载图片
-            String imgName = "" + fileCount + imgCount + ".png";//图片下载后的名字
+            long currTime = System.currentTimeMillis();//使用时间戳的原因：多次使用时，图片不重名
+            String imgName = currTime + "" + imgCount + ".png";//图片下载后的名字,加上count，避免极端情况下时间戳一样
             OkHttpManager.getInstance().downloadPic(imgUrl, IMG_PARENT_PATH + "/" + imgName);
             //替换图片地址
             String newImgPath = IMG_URL_REPLACE + "/" + imgName;
